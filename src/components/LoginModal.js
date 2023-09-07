@@ -15,9 +15,11 @@ const LoginModal = ({ setLoginModalWindow, setValidLogin, loginModalWindow, hide
   const validate = validateForm("login");
 
   const getUsers = async () => {
+    console.log('???????????');
     try {
       const response = await fetch(process.env.REACT_APP_USERS_URL);
       const body = await response.json();
+      console.log('>>>>>>', body);
       return body.data;
     }
     catch (err) {
@@ -53,7 +55,9 @@ const LoginModal = ({ setLoginModalWindow, setValidLogin, loginModalWindow, hide
     }
     else {
       //find all users
-      const existingUsers = await getUsers(formValue.email.toLowerCase());
+      const existingUsers = await getUsers();
+      //const existingUsers = await getUsers(formValue.email.toLowerCase());
+      console.log('>>>>>>>>>>>>>>', existingUsers, typeof existingUsers, formValue.email);
       //filter existence by email
       const findByEmail = existingUsers.filter((u) => u.email === formValue.email.toLowerCase());
       // if user not found by email

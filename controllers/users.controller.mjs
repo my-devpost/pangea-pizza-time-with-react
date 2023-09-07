@@ -25,6 +25,7 @@ export const getUser = (req, res) => {
 };
 export const createUser = (req, res) => {
     const user = req.body;
+    console.log('<<<<<<', user);
     userServices.createUser(user)
         .then(() => {
             res.status(200).json({
