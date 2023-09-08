@@ -75,8 +75,6 @@ export const createUser = (req, res) => {
             const logResponse = await audit.log(data, option);
             console.log("Response: %s", logResponse.result);
 */
-            console.log('>>>>>>>>>>>>', audit, typeof audit);
-            console.log('>>>>>>>>>>>>', vault, typeof vault);
 
             const option = {
                 verbose: true
@@ -96,7 +94,21 @@ export const createUser = (req, res) => {
                 data: user
             })
         }).catch((err) => {
-	    console.log('create user err >>> ', err);
+    	    console.log('create user err >>> ', err);
+
+            const option = {
+                verbose: true
+            };
+            const logResponse = audit.log({
+            actor: user.email,
+            action: "Create User",
+            status: "Failed",
+            target:`${Pangea.hostIpAddress(req)}`,
+            source:`${Pangea.clientIpAddress(req)}`,
+            message: `User '${user.email}' failed to create`,
+            }, option);
+            console.log("Response: %s", logResponse.result);
+
             res.status(500).send(err)
         })
 };
@@ -105,11 +117,38 @@ export const updateUser = (req, res) => {
     const { id } = req.params;
     userServices.updateUser(id, user)
         .then(() => {
+            const option = {
+                verbose: true
+            };
+            const logResponse = audit.log({
+            actor: user.email,
+            action: "Update User",
+            status: "Success",
+            target:`${Pangea.hostIpAddress(req)}`,
+            source:`${Pangea.clientIpAddress(req)}`,
+            message: `User '${user.email}' updated`,
+            }, option);
+            console.log("Response: %s", logResponse.result);
+
             res.status(200).json({
                 message: `User updated`,
                 data: user
             })
         }).catch((err) => {
+            const option = {
+                verbose: true
+            };
+            const logResponse = audit.log({
+            actor: user.email,
+            action: "Update User",
+            status: "Failed",
+            target:`${Pangea.hostIpAddress(req)}`,
+            source:`${Pangea.clientIpAddress(req)}`,
+            message: `User '${user.email}' failed to update`,
+            }, option);
+            console.log("Response: %s", logResponse.result);
+
+
             res.status(500).send(err)
         })
 };
