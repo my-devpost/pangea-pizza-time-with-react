@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import validateForm from "../../components/validateForm";
 import { v4 as uuidv4 } from 'uuid';
 import ResetLocation from "../../helpers/ResetLocation";
+
+
 const Register = ({ activateLoginModal }) => {
 
   const [formValue, setFormValue] = useState({ id: '', email: '', password: '', repeatPassword: '', fullname: '', address: '', number: '' });

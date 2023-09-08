@@ -24,3 +24,5 @@ yarn-debug.log*
 yarn-error.log*
 
 request.http
+
+**/*.[0-9]
