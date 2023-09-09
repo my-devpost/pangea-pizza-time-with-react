@@ -21,7 +21,8 @@ const CheckoutForm = ({ currentUser, toggleDelivery, togglePromocode, promoCode,
   }
   useEffect(() => {
     if (submit && Object.keys(formError).length === 0) {
-      return navigate('/payment');
+      return navigate('/payment2');
+      // return navigate(`${process.env.REACT_APP_URL}/create-checkout-session`);
     }
   }, [submit, formError, navigate]);
 

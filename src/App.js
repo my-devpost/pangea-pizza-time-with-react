@@ -335,8 +335,10 @@ function App() {
 
     totalPayment = parseFloat(totalPrice.toFixed(2));
 
-    setTotalPayment(totalPayment);
-    setTaxes(((totalPayment * 10) / 100).toFixed(2));
+    let totalTax = totalPayment * 10 / 100;
+
+    setTotalPayment(totalPayment + totalTax);
+    setTaxes(totalTax.toFixed(2));
   };
 
   const successMsg = () => {
@@ -533,6 +535,13 @@ function App() {
               currentUser={currentUser}
             />
           }
+        />
+        <Route
+          path="/payment2"
+          element={() => {
+            window.location.href = 'https://xpay.my';
+            return null;
+        }}
         />
         <Route path="/careers" element={<Careers />} />
         <Route path="*" element={<NotFound />} />
