@@ -29,6 +29,8 @@ import BlogPost from './routes/blog-post/BlogPost.js';
 import Profile from './routes/profile/Profile.js';
 import ResetLocation from './helpers/ResetLocation.js';
 
+
+
 function App() {
   const [allCategories, setAllCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState('Menu');
@@ -43,6 +45,17 @@ function App() {
   const [loginModalWindow, setLoginModalWindow] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
 
+
+  const createStripeCheckoutSession = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_STRIPE_URL}/create-checkout-session`);
+      
+      return response.status === 200;
+    } catch(err) {
+      console.log('create checkout session error >>> ', err.message)
+      return false;
+    }
+  }
 
   const getUser = async (id) => {
     try {
@@ -89,6 +102,50 @@ function App() {
     }
   }
 
+  const logoutUser = async (user) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_USERS_URL}/logout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user),
+      });
+
+      console.log('logout response >>> ', response);
+
+      if (response.status === 200) {
+        return true;
+      }
+    } catch (err) {
+      return false;
+    }
+  }
+
+  const loginUser = async (user) => {
+    // audit login log
+    console.log('login user >>> ', user);
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_USERS_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user),
+      });
+
+      console.log('login response >>> ', response);
+
+      if (response.status === 200) {
+        return true;
+      }
+    } catch (err) {
+      console.log(err.message);
+      return false;
+    }
+  }
+
 
 
   useEffect(() => {
@@ -115,6 +172,12 @@ function App() {
   }
 
   const handleLogout = () => {
+    // add audit log?
+    console.log('logout current user >>> ', currentUser);
+    ( async () => {
+      await logoutUser(currentUser);
+    })();
+
     setValidLogin(false);
     hideMenu();
     setCurrentUser({});
@@ -335,7 +398,7 @@ function App() {
 
     totalPayment = parseFloat(totalPrice.toFixed(2));
 
-    let totalTax = totalPayment * 10 / 100;
+    let totalTax = totalPayment * 0 / 100;
 
     setTotalPayment(totalPayment + totalTax);
     setTaxes(totalTax.toFixed(2));
@@ -435,6 +498,7 @@ function App() {
             hideMenu={hideMenu}
             getUser={getUser}
             setCurrentUser={setCurrentUser}
+            loginUser={loginUser}
           />
         }
         activateLoginModal={activateLoginModal}

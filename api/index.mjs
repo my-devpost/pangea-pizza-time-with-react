@@ -5,18 +5,27 @@ import sql from '../config/sql.mjs';
 import indexRouter from '../routes/index.route.mjs';
 const app = express();
 const port = 8080; // Choose a port for your server
+
+var corsOptions = {
+  origin: 'http://18.143.238.124:3000',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 app.use(cors());
 app.use(json());
 
-// const stripe = require('stripe')('sk_test_hRXesnlp0A2tjDoo7scD2ImL');
-import Stripe from 'stripe';
-const stripe = new Stripe('sk_test_hRXesnlp0A2tjDoo7scD2ImL');
-const YOUR_DOMAIN = process.env.REACT_APP_URL;
 
 //routes
 app.use("/", indexRouter)
 
+/*
 ///
+
+// const stripe = require('stripe')('sk_test_hRXesnlp0A2tjDoo7scD2ImL');
+import Stripe from 'stripe';
+const stripe = new Stripe('sk_test_hRXesnlp0A2tjDoo7scD2ImL');
+const YOUR_DOMAIN = process.env.REACT_APP_STRIPE_URL;
+
 app.post('/create-checkout-session', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -80,6 +89,7 @@ app.post('/checkout-cancelled', async (req, res) => {
     // log to server
 });
 ///
+*/
 
 app.use(("*"), (req, res) => {
     res.send("404 - Not Found!")

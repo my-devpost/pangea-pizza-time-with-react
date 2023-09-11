@@ -93,13 +93,13 @@ export const createUser = (req, res) => {
                 message: "User created",
                 data: user
             })
-        }).catch((err) => {
+        }).catch( async (err) => {
     	    console.log('create user err >>> ', err);
 
             const option = {
                 verbose: true
             };
-            const logResponse = audit.log({
+            const logResponse = await audit.log({
             actor: user.email,
             action: "Create User",
             status: "Failed",
@@ -116,11 +116,11 @@ export const updateUser = (req, res) => {
     const user = req.body;
     const { id } = req.params;
     userServices.updateUser(id, user)
-        .then(() => {
+        .then( async () => {
             const option = {
                 verbose: true
             };
-            const logResponse = audit.log({
+            const logResponse = await audit.log({
             actor: user.email,
             action: "Update User",
             status: "Success",
@@ -134,11 +134,11 @@ export const updateUser = (req, res) => {
                 message: `User updated`,
                 data: user
             })
-        }).catch((err) => {
+        }).catch( async (err) => {
             const option = {
                 verbose: true
             };
-            const logResponse = audit.log({
+            const logResponse = await audit.log({
             actor: user.email,
             action: "Update User",
             status: "Failed",
@@ -163,3 +163,51 @@ export const deleteUser = (req, res) => {
             res.status(500).send(err)
         })
 };
+
+export const logoutUser = (req, res) => {
+    const user = req.body;
+    const option = {
+        verbose: true
+    };
+
+    ( async () => {
+        const logResponse = await audit.log({
+            actor: user.email,
+            action: "User logout",
+            status: "Success",
+            target:`${Pangea.hostIpAddress(req)}`,
+            source:`${Pangea.clientIpAddress(req)}`,
+            message: `User '${user.email}' logout`,
+            }, option);
+            console.log("Response: %s", logResponse.result);
+        
+    })();
+ 
+    res.status(200).json({
+        message: "User logout"
+    })
+}
+
+export const loginUser = (req, res) => {
+    const user = req.body;
+    const option = {
+        verbose: true
+    };
+
+    ( async () => {
+        const logResponse = await audit.log({
+            actor: user.email,
+            action: "User login",
+            status: "Success",
+            target:`${Pangea.hostIpAddress(req)}`,
+            source:`${Pangea.clientIpAddress(req)}`,
+            message: `User '${user.email}' login`,
+            }, option);
+            console.log("Response: %s", logResponse.result);
+        
+    })();
+ 
+    res.status(200).json({
+        message: "User login"
+    })
+}

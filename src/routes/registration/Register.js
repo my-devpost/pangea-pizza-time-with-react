@@ -57,6 +57,26 @@ const Register = ({ activateLoginModal }) => {
       return false;
     }
   }
+
+  const loginUser = async (user) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_USERS_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (response.status === 200) {
+        return true;
+      }
+    } catch (err) {
+      return false;
+    }
+  }
+
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -114,6 +134,9 @@ const Register = ({ activateLoginModal }) => {
           <button
             className="passive-button-style txt-white"
             onClick={() => {
+              // add audit log?
+              // console.log('current user >>> ', currentUser);
+
               ResetLocation()
               activateLoginModal()
               setSubmit(false);

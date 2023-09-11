@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import validateForm from "./validateForm";
 
 
-const LoginModal = ({ setLoginModalWindow, setValidLogin, loginModalWindow, hideMenu, validLogin, getUser }) => {
+const LoginModal = ({ setLoginModalWindow, setValidLogin, loginModalWindow, hideMenu, validLogin, getUser, loginUser }) => {
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState({ email: '', password: '' });
   const [formError, setFormError] = useState({});
@@ -78,6 +78,12 @@ const LoginModal = ({ setLoginModalWindow, setValidLogin, loginModalWindow, hide
         return;
       }
       else if (findByEmail.length > 0 && findByEmail[0].password === formValue.password) {
+        // add audit log?
+        console.log('login email >>> ', formValue.email);
+        // ( async () => {
+          await loginUser({ email: formValue.email });
+        // })();
+
         getUser(findByEmail[0].id);
         setLoading(false);
         hideLoginModal();
