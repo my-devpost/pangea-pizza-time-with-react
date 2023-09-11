@@ -12,7 +12,7 @@ const CartTotals = ({ totalPayment, productsQuantity, taxes, className, validLog
         <section className="cart-totals">
           <section className="totals-content">
             <section>
-              <h4 className="cart-totals-sum">Tax 10%:</h4>
+              <h4 className="cart-totals-sum">Tax 0%:</h4>
               <p>$ {taxes}</p>
             </section>
             <section>

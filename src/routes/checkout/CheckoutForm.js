@@ -5,7 +5,7 @@ import { RiShoppingBagLine } from "react-icons/ri";
 import ResetLocation from "../../helpers/ResetLocation";
 import { Link, useNavigate } from "react-router-dom";
 
-const CheckoutForm = ({ currentUser, toggleDelivery, togglePromocode, promoCode, totalPayment, productsQuantity, taxes }) => {
+const CheckoutForm = ({ currentUser, toggleDelivery, togglePromocode, promoCode, totalPayment, productsQuantity, taxes, lineItems }) => {
   const [formValue, setFormValue] = useState({
     fullname: currentUser.fullname, email: currentUser.email, address: currentUser.address, number: currentUser.number, chooseDelivery: "", promoCode: ''
   });
@@ -19,12 +19,60 @@ const CheckoutForm = ({ currentUser, toggleDelivery, togglePromocode, promoCode,
     setSubmit(true);
     ResetLocation();
   }
-  useEffect(() => {
+  
+  const createCheckoutSession = async () => {
+    // post to stripe create checkout session route
+
+    const data = {
+      user: currentUser,
+      line_items: lineItems,
+      totalPrice: totalPayment,
+      totalQuantity: productsQuantity,
+      totalTax: taxes
+    }
+
+    const response = await fetch(`${process.env.REACT_APP_STRIPE_URL}/create-checkout-session`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        "Content-type": "application/json"
+      }
+    });
+
+    const json = await response.json();
+
+    console.log('create checkout session response >>> ', json, typeof json);
+    return json;
+
+  }
+
+  useEffect( () => {
+    console.log('form error keys, submit pressed >>> ', Object.keys(formError), submit)
     if (submit && Object.keys(formError).length === 0) {
-      return navigate('/payment2');
+  
+      // return navigate('/payment');
+      // return navigate('/payment2');
+
+
+      (async () => {
+        const session = await createCheckoutSession();
+        console.log('session >>> ', session);
+        window.location.replace(session.url);
+      })();
+
+
+      // const timeout = setTimeout(() => {
+      //   // 👇️ redirects to an external URL
+      //   window.location.replace('https://xpay.my');
+      // }, 3000);
+  
+      // return () => clearTimeout(timeout);
+
       // return navigate(`${process.env.REACT_APP_URL}/create-checkout-session`);
     }
+
   }, [submit, formError, navigate]);
+
 
   const handleValidation = (e) => {
     const { name, value } = e.target;
@@ -116,7 +164,7 @@ const CheckoutForm = ({ currentUser, toggleDelivery, togglePromocode, promoCode,
           {productsQuantity === 0 ? null : (
             <section className="cart-totals">
               <section className="totals-content">
-                <h4 className="cart-totals-sum">Tax 10%:</h4>
+                <h4 className="cart-totals-sum">Tax 0%:</h4>
                 <p>$ {taxes}</p>
               </section>
               <section className="totals-content">
@@ -126,7 +174,7 @@ const CheckoutForm = ({ currentUser, toggleDelivery, togglePromocode, promoCode,
               <section className="totals-content" >
                 <h4 className="cart-totals-sum">Total:</h4>
                 {/* COUNTING TWICE DUE TO STRICT MODE */}
-                <p>$ {(totalPayment / 2).toFixed(2)}</p>
+                <p>$ {totalPayment.toFixed(2)}</p>
               </section>
             </section>
 

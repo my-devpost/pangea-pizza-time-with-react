@@ -11,6 +11,7 @@ import {
   RootSection,
   Menu,
   Payment,
+  Payment2,
   Register,
   SingleItem,
 } from './routes/index';
@@ -602,10 +603,13 @@ function App() {
         />
         <Route
           path="/payment2"
-          element={() => {
-            window.location.href = 'https://xpay.my';
-            return null;
-        }}
+          element={
+            <Payment2
+              cartItems={cartItems}
+              totalPayment={totalPayment}
+              currentUser={currentUser}
+            />
+          }
         />
         <Route path="/careers" element={<Careers />} />
         <Route path="*" element={<NotFound />} />

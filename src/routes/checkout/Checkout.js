@@ -33,6 +33,15 @@ export default class Checkout extends React.Component {
       currentUser
     } = this.props;
     document.title = "Checkout | Pizza Time";
+
+    const lineItems = cartItems.map((item) => {
+      return {
+        name: item.ItemName,
+        price: item.ItemPrice,
+        quantity: item.quantity
+      }
+    })
+
     return (
       <main className="checkout">
         <h2>Checkout</h2>
@@ -46,7 +55,8 @@ export default class Checkout extends React.Component {
               togglePromocode={this.togglePromocode} className="checkout-carttotals"
               productsQuantity={productsQuantity}
               totalPayment={totalPayment}
-              taxes={taxes} currentUser={currentUser} />
+              taxes={taxes} currentUser={currentUser}
+              lineItems={lineItems} />
 
           </article>
         )}
