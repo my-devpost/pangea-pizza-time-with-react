@@ -1,4 +1,6 @@
-# How to start the Pizza Time app
+# How to start the Pizza Time app (with Pangea integration)
+
+This updated app has the [Pangea](https://pangea.cloud/) integration implemented.
 
 1. git clone the repo
 2. cd to the repo folder
