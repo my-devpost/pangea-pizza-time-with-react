@@ -1,3 +1,14 @@
+# How to start the Pizza Time app
+
+1. git clone the repo
+2. cd to the repo folder
+3. npn run server   // this start the server
+4. npm run start   // this run the client
+
+
+
+# ...................
+
 # Pizza Time
 
 ![Pizza Time preview](https://github.com/catherineisonline/pizza-time-with-react/blob/main/src/assets/images/project-preview.png?raw=true)
