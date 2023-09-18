@@ -1,6 +1,18 @@
 # How to start the Pizza Time app (with Pangea integration)
 
-This updated app has the [Pangea](https://pangea.cloud/) integration implemented.
+This updated app has the [Pangea](https://pangea.cloud/) integration implemented.  Before running step 3, copy the .env.example to .env and setup those ENV values accordingly.  You need to create a MySql table with the following schema:
+
+```
+CREATE TABLE `users` (
+  `id` varchar(100) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `fullname` varchar(40) NOT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `number` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
+```
 
 1. git clone the repo
 2. cd to the repo folder
